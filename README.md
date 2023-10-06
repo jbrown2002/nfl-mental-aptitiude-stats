@@ -7,7 +7,7 @@ Phone: 857-366-1567
 
 Software Used: RStudio Version 1.4.1564 
 
-Data \
+Data
 
 Pro Football Reference: Pro Football Stats, history, scores, standings, playoffs, Schedule & Records. Pro Football Reference. (2023). https://www.pro-football-reference.com/ 
 

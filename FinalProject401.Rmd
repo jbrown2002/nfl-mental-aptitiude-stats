@@ -1,0 +1,94 @@
+---
+title: "DA-401"
+author: "Jacob Brown"
+date: '2023-10-16'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Install Packages
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+## Initializing Data
+```{r}
+setwd('/Users/jacob_brown/Desktop/DA-401')
+RunningBacks <- read.csv("RBHOF.csv")
+WideReceivers <- read.csv("WRHOF.csv")
+Quarterbacks <- read.csv("QBHOF.csv")
+TightEnds <- read.csv("TEHOF.csv")
+PasserRating <- read.csv("PasserRating.csv")
+RushingYardLeaders <- read.csv("RYPG.csv")
+ReceivingYardLeaders <- read.csv("REYPG.csv")
+```
+## Cleaning Data
+```{r}
+colnames(RunningBacks) <- RunningBacks[1, ]
+RunningBacks <- RunningBacks[-1, ]
+colnames(WideReceivers) <- WideReceivers[1, ]
+WideReceivers <- WideReceivers[-1, ]
+colnames(Quarterbacks) <- Quarterbacks[1, ]
+Quarterbacks <- Quarterbacks[-1, ]
+colnames(TightEnds) <- TightEnds[1, ]
+TightEnds <- TightEnds[-1, ]
+```
+
+```{r}
+RushingYardLeaders <- RushingYardLeaders %>% rename('YardsperGame' = 'Yard/Game')
+PasserRating <- PasserRating %>% rename('Rating' = 'Rate')
+ReceivingYardLeaders <- ReceivingYardLeaders %>% rename('YardsperGame' = 'Y.G')
+```
+
+```{r}
+UpdatedRunningBacks <- RunningBacks[-10, ]
+UpdatedWideReceivers <- WideReceivers[-15, ]
+```
+
+
+```{r}
+TopFiftyRB <- UpdatedRunningBacks[1:50, ]
+TopFiftyWR <- UpdatedWideReceivers[1:50, ]
+```
+
+```{r}
+summary(RushingYardLeaders)
+summary(ReceivingYardLeaders)
+summary(PasserRating)
+```
+
+
+
+
+##Preliminary Analyses
+#Averages of Key Metrics
+```{r}
+mean(PasserRating$Rating)
+mean(RushingYardLeaders$YardsperGame)
+mean(ReceivingYardLeaders$YardsperGame)
+```
+#Averages of Positional Metrics
+
+```{r}
+print(Quarterbacks[12, ])
+print(WideReceivers[15, ])
+print(RunningBacks[10, ])
+```
+
+```{r}
+TopFiftyRB %>%ggplot(aes(PB, HOFm, fill = PB)) + stat_summary(fun.y = "mean", geom = "bar") +
+stat_summary(fun.data="mean_cl_normal", geom ="errorbar", fun.args=list(conf.int=.95), width =0.35) +theme(legend.position = "none")+labs(x = "Pro Bowl", y="Hall Of Fame Monitor")
+```
+
+```{r}
+RB<-TopFiftyRB$HOFm
+WR <- TopFiftyWR$HOFm
+result <- t.test(RB, WR, paired = TRUE)
+
+result
+```
+

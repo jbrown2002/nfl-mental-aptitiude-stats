@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##Install Packages
 ```{r}
+#Load in Packages
+library(vctrs) 
 library(dplyr)
 library(ggplot2)
 ```
@@ -18,16 +20,17 @@ library(ggplot2)
 ## Initializing Data
 ```{r}
 setwd('/Users/jacob_brown/Desktop/DA-401')
-RunningBacks <- read.csv("RBHOF.csv")
-WideReceivers <- read.csv("WRHOF.csv")
-Quarterbacks <- read.csv("QBHOF.csv")
-TightEnds <- read.csv("TEHOF.csv")
-PasserRating <- read.csv("PasserRating.csv")
-RushingYardLeaders <- read.csv("RYPG.csv")
-ReceivingYardLeaders <- read.csv("REYPG.csv")
+RunningBacks <- read.csv("RBHOF.csv") #Read in Running Backs Data
+WideReceivers <- read.csv("WRHOF.csv") #Read in Wide Receivers Data
+Quarterbacks <- read.csv("QBHOF.csv") #Read in Quarterbacks Data
+TightEnds <- read.csv("TEHOF.csv") #Read in Tight Ends Data
+PasserRating <- read.csv("PasserRating.csv") #Read in Top Passer Ratings of All Time
+RushingYardLeaders <- read.csv("RYPG.csv") #Read in Top Rushing Yards per Game of All Time
+ReceivingYardLeaders <- read.csv("REYPG.csv") #Read in Top Receiving Yards per Game of All Time
 ```
 ## Cleaning Data
 ```{r}
+#Drop the first column these data sets to make sure the column names are not included in the dataset 
 colnames(RunningBacks) <- RunningBacks[1, ]
 RunningBacks <- RunningBacks[-1, ]
 colnames(WideReceivers) <- WideReceivers[1, ]
@@ -39,23 +42,36 @@ TightEnds <- TightEnds[-1, ]
 ```
 
 ```{r}
-RushingYardLeaders <- RushingYardLeaders %>% rename('YardsperGame' = 'Yard/Game')
+#Rename the column in the data
 PasserRating <- PasserRating %>% rename('Rating' = 'Rate')
-ReceivingYardLeaders <- ReceivingYardLeaders %>% rename('YardsperGame' = 'Y.G')
 ```
 
 ```{r}
-UpdatedRunningBacks <- RunningBacks[-10, ]
+#Drop the Column that has the average metrics for HOF players
+UpdatedRunningBacks <- RunningBacks[-10, ] 
 UpdatedWideReceivers <- WideReceivers[-15, ]
+UpdatedQuarterbacks <- WideReceivers[-12, ]
+UpdatedTightEnds <- TightEnds[-8, ]
 ```
 
 
 ```{r}
+#Take the top fifty columns for each position
 TopFiftyRB <- UpdatedRunningBacks[1:50, ]
 TopFiftyWR <- UpdatedWideReceivers[1:50, ]
+TopFiftyQB <- UpdatedQuarterbacks[1:50, ]
+TopFiftyTE <- UpdatedTightEnds[1:50, ]
 ```
 
 ```{r}
+#Take the top 50 players within each success metric
+PasserRatingTop50 <- PasserRating[1:50, ]
+ReceivingYardLeadersTop50 <- ReceivingYardLeaders[1:50, ]
+RushingYardLeadersTop50 <- RushingYardLeaders[1:50, ]
+```
+
+```{r}
+#Summary of the three main success metrics
 summary(RushingYardLeaders)
 summary(ReceivingYardLeaders)
 summary(PasserRating)
@@ -65,30 +81,191 @@ summary(PasserRating)
 
 
 ##Preliminary Analyses
+
 #Averages of Key Metrics
 ```{r}
-mean(PasserRating$Rating)
-mean(RushingYardLeaders$YardsperGame)
-mean(ReceivingYardLeaders$YardsperGame)
+#Average of success metrics
+mean(PasserRating$Rate)
+mean(RushingYardLeaders$Y.G)
+mean(ReceivingYardLeaders$Y.G)
 ```
 #Averages of Positional Metrics
 
 ```{r}
+#Average of Hall of Famers at each position
 print(Quarterbacks[12, ])
 print(WideReceivers[15, ])
 print(RunningBacks[10, ])
+print(TightEnds[8, ])
+```
+#Create and Updating Datasets wih Wonderlic Scores
+
+```{r}
+#Adding the Wonderlic score of the top 50 passer ratings
+PasserRatingTop50$Score <- c(24, 35, 20, 28, 28, 29, 33, 34, 25, 33, 37, 33, 39, 28, 13, 30, 29, 32, 36, 25, 37, 20, 21, 20, 34, 38, 20, 25, 37, 31, 33, 40, 38, 15, 26, 18, 29, 24, 27, 40, 25, 24, 16, 25, 28, 22, 24, 14, 14, 24)
 ```
 
 ```{r}
-TopFiftyRB %>%ggplot(aes(PB, HOFm, fill = PB)) + stat_summary(fun.y = "mean", geom = "bar") +
-stat_summary(fun.data="mean_cl_normal", geom ="errorbar", fun.args=list(conf.int=.95), width =0.35) +theme(legend.position = "none")+labs(x = "Pro Bowl", y="Hall Of Fame Monitor")
+#Adding the Wonderlic score of the top 50 rushing yards per game of all time
+RushingYardLeadersTop50$Score2 <- c(16, 16, 20, 16, 22, 20, 21, 16, 11, 20, 16, 14, 16, 25, 20, 15, 16, 20, 13, 12, 16, 32, 11, 16, 20, 7, 16, 10, 14, 16, 16, 21, 17, 16, 24, 21, 16, 16, 25, 18, 16, 16, 14, 16, 16, 12, 20, 28, 17, 30)
 ```
 
 ```{r}
-RB<-TopFiftyRB$HOFm
-WR <- TopFiftyWR$HOFm
-result <- t.test(RB, WR, paired = TRUE)
-
-result
+#Adding the Wonderlic score of the top 50 receiving yards per game of all time
+ReceivingYardLeadersTop50$Score1 <- c(19, 15, 17, 41, 17, 21, 36, 27, 18, 11, 24, 19, 25, 16, 17, 17, 21, 19, 17, 23, 6, 32, 16, 17, 22, 12, 13, 12, 17, 17, 17, 20, 34, 27, 17, 13, 15, 17, 15, 24, 20, 25, 17, 10, 20, 18, 21, 17, 26, 17)
 ```
 
+```{r}
+#Create a dataset of all of the combined Wonderlic Scores between top passers, receivers, and rushers all time
+OverallScores <- c(24, 35, 20, 28, 28, 29, 33, 34, 25, 33, 37, 33, 39, 28, 13, 30, 29, 32, 36, 25,37, 20, 21, 20, 34, 38, 20, 25, 37, 31, 33, 40, 38, 15, 26, 18, 29, 24, 27, 40, 25, 24, 16, 25, 28, 22, 24, 14, 14, 24, 19, 15, 17, 41, 17, 21, 36, 27, 18, 11, 24, 19, 25, 16, 17, 17, 21, 19, 17, 23, 6, 32, 16, 17, 22, 12, 13, 12, 17, 17, 17, 20, 34, 27, 17, 13, 15, 17, 15, 24, 20, 25, 17, 10, 20, 18, 21, 17, 26, 17, 16, 16, 20, 16, 22, 20, 21, 16, 11, 20, 16, 14, 16, 25, 20, 15, 16, 20, 13, 12, 16, 32, 11, 16, 20, 7, 16, 10, 14, 16, 16, 21, 17, 16, 24, 21, 16, 16, 25, 18, 16, 16, 14, 16, 16, 12, 20, 28, 17, 30)
+
+
+Group <- c("QB", "QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB", "QB","QB","QB","QB", "QB", "QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB", "QB", "QB", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR","WR", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR","WR", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR","WR", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR","WR", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR", "RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB")
+
+Scores <- data.frame(Group, OverallScores)
+```
+
+#Graphs
+
+```{r}
+#Scatter plot of the relationship between passer rating and Wonderlic score
+PasserRatingTop50 %>% ggplot(aes(Score, Rate)) + geom_point(aes(color = Score)) +labs(x = "Wonderlic Score", y = "Passer Rating", Title = "Passer Rating vs. Wonderlic Score") + geom_smooth(method=lm, level = 0.95) + theme(panel.background = element_rect(fill = 'yellow'))
+```
+
+```{r}
+#Scatter plot of the relationship between receiving yards per game and Wonderlic score
+ReceivingYardLeadersTop50 %>% ggplot(aes(Score1, Y.G)) + geom_point(aes(color = Score1)) +labs(x = "Wonderlic Score", y = "Receiving Yards Per Game", title = "Receiving Yards Per Game vs. Wonderlic Score") + geom_smooth(method=lm, level = 0.95, color = "black") + theme(panel.background = element_rect(fill = 'orange'))
+```
+```{r}
+#Scatter plot of the relationship between rushing yards per game and Wonderlic score
+RushingYardLeadersTop50 %>% ggplot(aes(Score2, Y.G)) + geom_point(aes(color = Score2)) +labs(x = "Wonderlic Score", y = "Rushing Yards Per Game", title = "Rushing Yards Per Game vs. Wonderlic Score") + geom_smooth(method=lm, level = 0.95, color = "black") + theme(panel.background = element_rect(fill = 'lightgreen'))
+```
+
+#Statistical Tests
+
+```{r}
+#Create a one-way ANOVA analyzing the differences in mean Wonderlic scores between groups
+WonderlicScoresModel <- aov(OverallScores ~ Group, data = Scores)
+```
+
+```{r}
+#Summary of the model
+summary(WonderlicScoresModel)
+```
+
+```{r}
+#Post-hoc Testing
+tukey_results <- TukeyHSD(WonderlicScoresModel)
+tukey_results
+```
+
+
+
+
+
+
+```{r}
+#Regression model of the relationship between passer rating and Wonderlic score
+PassersModel <- lm(Rate ~ Score, data = PasserRatingTop50)
+PassersModel
+summary(PassersModel)
+```
+
+```{r}
+#Regression model of the relationship between rushing yards per game and Wonderlic score
+RushingYardsModel <- lm(Y.G ~ Score2, data = RushingYardLeadersTop50)
+RushingYardsModel
+summary(RushingYardsModel)
+```
+
+```{r}
+#Regression model of the relationship between receiving yards per game and Wonderlic score
+ReceivingYardsModel <- lm(Y.G ~ Score1, data = ReceivingYardLeadersTop50)
+ReceivingYardsModel
+summary(ReceivingYardsModel)
+```
+
+```{r}
+#Mean of the Wonderlic scores for each success metric
+mean(PasserRatingTop50$Score)
+mean(ReceivingYardLeadersTop50$Score1)
+mean(RushingYardLeadersTop50$Score2)
+```
+
+```{r}
+#Read in on the field performance metrics
+setwd('/Users/jacob_brown/Desktop/DA-401')
+AllTimePassingYards <- read.csv("AllTimePassing.csv")
+AllTimeReceivingYard <- read.csv("ReceivingYards.csv")
+AllTimeRushingYards <- read.csv("RushingLeaders.csv")
+```
+
+```{r}
+#Take Top 50 Rushers, Passers, and Receivers of All Time
+TopFiftyReceiving <- AllTimeReceivingYard[1:50, ]
+TopFiftyPassing <- AllTimePassingYards[1:50, ]
+TopFiftyRushing <- AllTimeRushingYards[1:50, ]
+```
+
+```{r}
+#Add Combine Results and Wonderlic to Passers Data Set
+
+#Drop Passing Yards Column
+TopFiftyPassing <- TopFiftyPassing[ -c(3) ]
+#Dropping Commas and re-add passing yards column
+TopFiftyPassing$Yards <- c(89214, 80358, 71940, 71838, 64088, 63440, 62792, 61361, 59055, 57023, 53990, 51475, 49325, 47003, 46247, 46233, 44611, 43040, 42320, 42082, 40922, 40551, 40239, 39197, 38511, 38147, 37920, 37276, 36822, 36638, 35650, 35467, 35133, 34990, 34837, 34665, 34393, 34241, 34183, 33503, 33462, 33124, 33070, 32942, 32838, 32382, 32344, 32224, 32072, 31548)
+TopFiftyPassing$Wonderlic <- c(33, 28, 28, 22, 25, 30, 32, 16, 35, 39, 38, 29, 24, 24, 17, 36, 24, 27, 28, 30, 6, 24, 33, 29, 24, 18, 14, 20, 29, 40, 15, 26, 48, 24, 24, 34, 24, 37, 24, 10, 33, 24, 29, 24, 21, 29, 24, 22, 24, 24)
+TopFiftyPassing$Forty <- c(5.17, 4.83, 4.8, 4.95, 4.75, 5.08, 4.89, 4.89, 4.71, 4.92, 4.81, 4.51, 4.44, 4.67, 4.65, 4.75, 4.7, 4.78, 4.84, 4.55, 4.78, 4.7, 4.87, 4.93, 4.82, 4.78, 4.6, 4.64, 4.69, 4.93, 4.7, 4.71, 4.77, 4.87, 4.78, 4.67, 4.65, 4.78, 5.01, 4.58, 4.44, 4.55, 4.78, 4.6, 4.78, 4.59, 5.1, 4.88, 4.56, 4.8)
+TopFiftyPassing$Vertical <- c(24.5, 32, 31, 42.5, 33.5, 34, 31, 31, 34.5, 24, 30.5, 28.5, 39, 24, 33, 36, 32.5, 31, 28.5, 34, 31.5, 27.5, 35, 28.5, 29.5, 40.5, 33, 33, 34.5, 33, 32, 31, 32, 30.5, 21, 31, 37, 39.5, 30, 31, 28, 40.5, 25, 30, 27.5, 35, 24, 31, 30.5, 31 )
+```
+
+```{r}
+#Multiple Regression Models of Potential Correlates of Success for Passers
+PassingYardsModel = lm(formula = Yards ~ Forty + Wonderlic + Vertical, data = TopFiftyPassing)
+summary(PassingYardsModel)
+```
+
+```{r}
+correlation <- cor(TopFiftyPassing$Forty, TopFiftyPassing$Yards, method= 'pearson')
+print(correlation)
+```
+```{r}
+#Add Combine Results and Wonderlic to Rushers Data Set
+
+#Drop Rushing Yards Column 
+TopFiftyRushing <- TopFiftyRushing[ -c(3) ]
+#Dropping Commas and re-add rushing yards column
+TopFiftyRushing$Yards <- c(18355, 16726, 16000, 15269, 14918, 14101, 13684, 13662, 13259, 12739, 12312, 12279, 12246, 12243, 12120, 12074, 11695, 11438, 11352, 11241, 11236, 11102, 10967, 10643, 10607, 10591, 10449, 10441, 10413, 10273, 10009, 9923, 9796, 9723, 9651, 9453, 9407, 9205, 8936, 8614, 8597, 8522, 8474, 8261, 8225, 8189, 8188, 8172, 8167, 8111)
+TopFiftyRushing$Wonderlic <- c(16, 24, 6, 16, 16, 18, 13, 12, 27, 11, 16, 16, 14, 16, 18, 22, 7, 28, 16, 16, 6, 11, 13, 16, 20, 14, 16, 14, 14, 16, 30, 20, 18, 16, 10, 18, 20, 15, 15, 16, 20, 32, 12, 16, 19, 17, 16, 23, 25, 16)
+TopFiftyRushing$Forty <- c(4.55, 4.4, 4.58, 4.37, 4.4, 4.4, 4.46, 4.77, 4.41, 4.3, 4.5, 4.35, 4.38, 4.59, 4.8, 4.47, 4.29, 4.45, 4.43, 4.41, 4.7, 4.45, 4.38, 4.71, 4.58, 4.45, 4.56, 4.65, 4.46, 4.65, 4.56, 4.26, 4.46, 4.65, 4.24, 4.58, 4.5, 4.44, 4.54, 4.65, 4.39, 4.47, 4.28, 4.65, 4.35, 4.65, 4.62, 4.73, 4.39, 4.53)
+TopFiftyRushing$Vertical <- c(31, 32, 34, 40, 38.5, 41.5, 40.5, 34, 34, 39.5, 34, 33.5, 36, 37, 34, 33, 32, 37.5, 34, 37, 34, 29, 36.5, 34.5, 32, 39.5, 35.5, 34, 35.5, 36, 37, 39, 33, 34, 35, 32, 37, 38.5, 37, 33, 34, 32.5, 41, 34, 40.5, 38.5, 36.5, 33, 36, 31.5)
+```
+
+```{r}
+#Multiple Regression Models of Potential Correlates of Success for Rushers
+RushingYardsModel = lm(formula = Yards ~ Forty + Wonderlic + Vertical, data = TopFiftyRushing)
+summary(RushingYardsModel)
+```
+
+```{r}
+#Add Combine Results and Wonderlic to Receivers Data Set
+
+#Drop Receiving Yards Column 
+TopFiftyReceiving <- TopFiftyReceiving[ -c(3) ]
+#Dropping Commas and re-add receiving column
+TopFiftyReceiving$Yards <- c(22895, 17492, 15934, 15269, 15208, 15127, 14934, 14731, 14580, 14345, 14185, 14004, 13899, 13779, 13777, 13640, 13382, 13198, 13089, 13046, 12785, 12721, 12351, 12291, 12287, 12146, 12083, 12061, 11904, 11862, 11841, 11834, 11619, 11438, 11389, 11373, 11263, 11059, 10950, 10932, 10927, 10863, 10856, 10716, 10571, 10514, 10372, 10283, 10266, 10205)
+TopFiftyReceiving$Wonderlic <- c(16, 18, 6, 12, 17, 20, 17, 17, 19, 13, 23, 17, 28, 20, 15, 11, 17, 20, 19, 17, 17, 21, 17, 9, 24, 17, 20, 17, 10, 24, 20, 17, 41, 17, 20, 18, 30, 17, 20, 25, 22, 17, 16, 20, 11, 10, 17, 19, 17, 7)
+TopFiftyReceiving$Forty <- c(4.71, 4.63, 4.45, 4.25, 4.55, 4.49, 4.39, 4.39, 4.38, 4.45, 4.41, 4.4, 4.63, 4.71, 4.35, 4.39, 4.38, 4.4, 4.7, 4.65, 4.43, 4.5, 4.52, 4.47, 4.42, 4.38, 4.55, 4.55, 4.52, 4.57, 4.5, 4.48, 4.35, 4.53, 4.52, 4.56, 4.35, 4.57, 4.18, 4.53, 4.61, 4.45, 4.37, 4.53, 4.41, 4.62, 4.3, 4.31, 4.48, 4.47)
+TopFiftyReceiving$Vertical <- c(27.5, 38, 33, 47, 36.5, 33.5, 35, 38.5, 35, 36, 39, 35, 36, 33.5, 35, 38.5, 37, 35, 38, 31, 37, 35, 37, 33.5, 36, 35, 30.5, 32, 36, 39.5, 35, 42.5, 33, 35, 36.5, 34.5, 33, 40, 37, 35, 41, 35, 38.5, 31.5, 34.5, 35, 42, 35, 35, 31.5)
+```
+
+```{r}
+#Multiple Regression Models of Potential Correlates of Success for Receivers
+ReceivingYardsModel = lm(formula = Yards ~ Forty + Wonderlic + Vertical, data = TopFiftyReceiving)
+summary(ReceivingYardsModel)
+```
+
+```{r}
+#Finding the mean forty yard dash and standard deviation for forty yard dash for passers
+mean(TopFiftyPassing$Forty)
+sd(TopFiftyPassing$Forty)

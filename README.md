@@ -31,6 +31,8 @@ I want to thank Dr. Sarah Supp for all of her guidance throughout this process, 
 
 Licensing:
 
+A Creative Commons Zero v1.0 Universal license was used for this project. This means the research falls under the public domain.
+
 
 
 

@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##Install Packages
+## Install Packages
 ```{r}
 #Load in Packages
 library(vctrs) 
@@ -80,16 +80,16 @@ summary(PasserRating)
 
 
 
-##Preliminary Analyses
+## Preliminary Analyses
 
-#Averages of Key Metrics
+# Averages of Key Metrics
 ```{r}
 #Average of success metrics
 mean(PasserRating$Rate)
 mean(RushingYardLeaders$Y.G)
 mean(ReceivingYardLeaders$Y.G)
 ```
-#Averages of Positional Metrics
+# Averages of Positional Metrics
 
 ```{r}
 #Average of Hall of Famers at each position
@@ -98,7 +98,7 @@ print(WideReceivers[15, ])
 print(RunningBacks[10, ])
 print(TightEnds[8, ])
 ```
-#Create and Updating Datasets wih Wonderlic Scores
+# Create and Updating Datasets wih Wonderlic Scores
 
 ```{r}
 #Adding the Wonderlic score of the top 50 passer ratings
@@ -125,7 +125,7 @@ Group <- c("QB", "QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB
 Scores <- data.frame(Group, OverallScores)
 ```
 
-#Graphs
+# Graphs
 
 ```{r}
 #Scatter plot of the relationship between passer rating and Wonderlic score
@@ -141,7 +141,7 @@ ReceivingYardLeadersTop50 %>% ggplot(aes(Score1, Y.G)) + geom_point(aes(color = 
 RushingYardLeadersTop50 %>% ggplot(aes(Score2, Y.G)) + geom_point(aes(color = Score2)) +labs(x = "Wonderlic Score", y = "Rushing Yards Per Game", title = "Rushing Yards Per Game vs. Wonderlic Score") + geom_smooth(method=lm, level = 0.95, color = "black") + theme(panel.background = element_rect(fill = 'lightgreen'))
 ```
 
-#Statistical Tests
+# Statistical Tests
 
 ```{r}
 #Create a one-way ANOVA analyzing the differences in mean Wonderlic scores between groups
@@ -207,6 +207,7 @@ TopFiftyPassing <- AllTimePassingYards[1:50, ]
 TopFiftyRushing <- AllTimeRushingYards[1:50, ]
 ```
 
+## Regression Models
 ```{r}
 #Add Combine Results and Wonderlic to Passers Data Set
 

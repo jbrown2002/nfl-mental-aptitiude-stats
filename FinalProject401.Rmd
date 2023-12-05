@@ -85,7 +85,7 @@ summary(PasserRating)
 # Averages of Key Metrics
 ```{r}
 #Average of success metrics
-mean(PasserRating$Rate)
+mean(PasserRating$Rating)
 mean(RushingYardLeaders$Y.G)
 mean(ReceivingYardLeaders$Y.G)
 ```
@@ -129,7 +129,7 @@ Scores <- data.frame(Group, OverallScores)
 
 ```{r}
 #Scatter plot of the relationship between passer rating and Wonderlic score
-PasserRatingTop50 %>% ggplot(aes(Score, Rate)) + geom_point(aes(color = Score)) +labs(x = "Wonderlic Score", y = "Passer Rating", Title = "Passer Rating vs. Wonderlic Score") + geom_smooth(method=lm, level = 0.95) + theme(panel.background = element_rect(fill = 'yellow'))
+PasserRatingTop50 %>% ggplot(aes(Score, Rating)) + geom_point(aes(color = Score)) +labs(x = "Wonderlic Score", y = "Passer Rating", Title = "Passer Rating vs. Wonderlic Score") + geom_smooth(method=lm, level = 0.95) + theme(panel.background = element_rect(fill = 'yellow'))
 ```
 
 ```{r}
@@ -166,7 +166,7 @@ tukey_results
 
 ```{r}
 #Regression model of the relationship between passer rating and Wonderlic score
-PassersModel <- lm(Rate ~ Score, data = PasserRatingTop50)
+PassersModel <- lm(Rating ~ Score, data = PasserRatingTop50)
 PassersModel
 summary(PassersModel)
 ```

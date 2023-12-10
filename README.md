@@ -5,7 +5,7 @@ By: Jacob Brown \
 Email: brown_j1@denison.edu \
 Phone: 857-366-1567 
 
-Software Used: RStudio Version 1.4.1564 
+Software Used: R version 4.1.1  
 
 R Core Team (2021). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
 

@@ -5,7 +5,16 @@ By: Jacob Brown \
 Email: brown_j1@denison.edu \
 Phone: 857-366-1567 
 
-Software Used: R version 4.1.1  
+Software Used: R version 4.1.1 
+
+Packages: dplyr, vcrts, ggplot2
+
+Wickham H (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York. ISBN 978-3-319-24277-4, https://ggplot2.tidyverse.org.
+
+Wickham H, François R, Henry L, Müller K, Vaughan D (2023). dplyr: A Grammar of Data Manipulation. R package version 1.1.4, https://github.com/tidyverse/dplyr, https://dplyr.tidyverse.org.
+
+Wickham H, Henry L, Vaughan D (2023). vctrs: Vector Helpers. R package version 0.6.5, 
+https://github.com/r-lib/vctrs, https://vctrs.r-lib.org/.
 
 R Core Team (2021). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
 

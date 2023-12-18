@@ -270,3 +270,13 @@ summary(ReceivingYardsModel)
 #Finding the mean forty yard dash and standard deviation for forty yard dash for passers
 mean(TopFiftyPassing$Forty)
 sd(TopFiftyPassing$Forty)
+```
+
+```{r}
+#Boxplot Comparing Spread of Wonderlic Scores by Position
+boxplot(Scores$OverallScores ~ Scores$Group,
+        col='steelblue',
+        main='Comparison of Wonderlic Scores By Position',
+        xlab='Position',
+        ylab='Wonderlic Score')
+```

@@ -2,7 +2,7 @@
 I evaluated the relationship between the Wonderlic test given to NFL players and their career success. In this research, the Wonderlic Test has been applied to the success metrics of passer rating, rushing yards per game, and receiving yards per game. Furthermore, the combine metrics of vertical jump and fory yard dash were included as alternative explanations for the on the field performance metrics of career passing yard, career rushing yards, and career receiving yards.
 
 By: Jacob Brown \
-Email: brown_j1@denison.edu \
+Email: jacmol13@gmail.com \
 Phone: 857-366-1567 
 
 Software Used: R version 4.1.1 

@@ -1,0 +1,41 @@
+---
+title: "My Dashboard Presentation"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: cosmo
+    storyboard: true
+---
+
+
+
+
+```{r}
+#Create a dataset of all of the combined Wonderlic Scores between top passers, receivers, and rushers all time
+OverallScores <- c(24, 35, 20, 28, 28, 29, 33, 34, 25, 33, 37, 33, 39, 28, 13, 30, 29, 32, 36, 25,37, 20, 21, 20, 34, 38, 20, 25, 37, 31, 33, 40, 38, 15, 26, 18, 29, 24, 27, 40, 25, 24, 16, 25, 28, 22, 24, 14, 14, 24, 19, 15, 17, 41, 17, 21, 36, 27, 18, 11, 24, 19, 25, 16, 17, 17, 21, 19, 17, 23, 6, 32, 16, 17, 22, 12, 13, 12, 17, 17, 17, 20, 34, 27, 17, 13, 15, 17, 15, 24, 20, 25, 17, 10, 20, 18, 21, 17, 26, 17, 16, 16, 20, 16, 22, 20, 21, 16, 11, 20, 16, 14, 16, 25, 20, 15, 16, 20, 13, 12, 16, 32, 11, 16, 20, 7, 16, 10, 14, 16, 16, 21, 17, 16, 24, 21, 16, 16, 25, 18, 16, 16, 14, 16, 16, 12, 20, 28, 17, 30)
+
+
+Group <- c("QB", "QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB", "QB","QB","QB","QB", "QB", "QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB","QB", "QB", "QB", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR","WR", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR","WR", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR","WR", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR","WR", "WR","WR", "WR","WR","WR", "WR", "WR", "WR", "WR", "RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB", "RB","RB","RB","RB","RB","RB","RB","RB","RB","RB")
+
+Scores <- data.frame(Group, OverallScores)
+```
+
+
+
+# Plot
+
+
+```{r}
+#Boxplot Comparing Spread of Wonderlic Scores by Position
+boxplot(Scores$OverallScores ~ Scores$Group,
+        col='steelblue',
+        main='Comparison of Wonderlic Scores By Position',
+        xlab='Position',
+        ylab='Wonderlic Score')
+```
+
+
+# Description
+
+This plot shows the spread of the top quarterbacks, running backs, and wide receivers in the NFL. As shown, the quarterbacks group contains a higher median value than the other two groups. Additionally, the wide receivers and running backs groups have very similar spreads.
